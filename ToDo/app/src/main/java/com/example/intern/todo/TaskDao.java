@@ -1,0 +1,38 @@
+package com.example.intern.todo;
+
+
+import android.arch.lifecycle.LiveData;
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
+import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
+
+import java.util.List;
+
+@Dao
+public interface TaskDao {
+
+    @Query("SELECT * FROM tasks")
+    LiveData<List<Task>> loadAllTasks();
+
+    @Insert
+    void insertTask(Task task);
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    void updateTask(Task task);
+
+    @Delete
+    void deleteTask(Task task);
+
+    @Query("SELECT * FROM tasks WHERE id = :id")
+    LiveData<Task> loadTaskById(int id);
+
+    @Query("SELECT * FROM tasks WHERE category = :category")
+    List<Task> loadTasksByCategory(String category);
+
+
+
+
+}
