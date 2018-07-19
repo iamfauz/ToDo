@@ -1,13 +1,22 @@
 package com.example.intern.todo;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
     FloatingActionButton fabButton;
 
     TaskAdapter mTaskAdapter;
+    private AppDatabase mDb;
 
 
     @Override
@@ -33,15 +43,21 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
         //Data Binding with ButterKnife
         ButterKnife.bind(this);
 
+        //Get db instance
+        mDb = AppDatabase.getInstance(getApplicationContext());
+
         //Initialize Views
         initViews();
+
+        //Setup ViewModel
+        setupViewModel();
 
     }
 
     /**
      * Method to initialize all Views
      */
-    public void initViews(){
+    public void initViews() {
 
         initRecyclerView();
         setupFabButton();
@@ -53,21 +69,16 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
      */
     public void initRecyclerView() {
 
+        //RecyclerViewDefinition
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-
         mRecyclerView.setLayoutManager(layoutManager);
         //Improving performance
         mRecyclerView.setHasFixedSize(true);
-
+        mTaskAdapter = new TaskAdapter(this);
         mRecyclerView.setAdapter(mTaskAdapter);
 
-
-        /*
-         Add a touch helper to the RecyclerView to recognize when a user swipes to delete an item.
-         An ItemTouchHelper enables touch behavior (like swipe and move) on each ViewHolder,
-         and uses callbacks to signal when a user is performing these actions.
-         */
+        //Touch helper to the RecyclerView to recognize when a user swipes to delete an item.
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -77,7 +88,15 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
             // Called when a user swipes left or right on a ViewHolder
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                //TODO --> Here is where you'll implement swipe to delete
+
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        int position = viewHolder.getAdapterPosition();
+                        List<Task> tasks = mTaskAdapter.getTasks();
+                        mDb.taskDao().deleteTask(tasks.get(position));
+                    }
+                });
 
             }
         }).attachToRecyclerView(mRecyclerView);
@@ -99,14 +118,56 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
             }
         });
 
+    }
 
+    /**
+     * Method to setup MainViewModel
+     */
+    private void setupViewModel() {
+
+        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        viewModel.getTasks().observe(this, new Observer<List<Task>>() {
+            @Override
+            public void onChanged(@Nullable List<Task> taskEntries) {
+                mTaskAdapter.setTasksData(taskEntries);
+            }
+        });
 
     }
 
     @Override
     public void onListItemClick(Task task) {
 
-        //TODO --> go to AddTaskActivity
+        // Launch AddTaskActivity adding the itemId as an extra in the intent
+        Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
+        intent.putExtra(AddTaskActivity.FLAG_UPDATE_ID, task.getId());
+        startActivity(intent);
 
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        /* Use AppCompatActivity's method getMenuInflater to get a handle on the menu inflater */
+        MenuInflater inflater = getMenuInflater();
+        /* Use the inflater's inflate method to inflate our menu layout to this menu */
+        inflater.inflate(R.menu.menu_main, menu);
+        /* Return true so that the menu is displayed in the Toolbar */
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.About) {
+
+
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

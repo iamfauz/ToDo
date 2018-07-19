@@ -90,7 +90,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
 
         holder.task = mTaskList.get(position);
         holder.descriptionTextView.setText(mTaskList.get(position).getDescription());
-        holder.dateTextView.setText(DateHelper.getDateString(mTaskList.get(position).getDueDate(), "dd/MM/yyyy , hh:mm a"));
+        holder.dateTextView.setText(DateHelper.getDateString(mTaskList.get(position).getDueDate(), "dd MMM, yyyy, hh:mm a"));
 
         }
 
@@ -110,5 +110,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
         notifyDataSetChanged();
     }
 
+
+    public List<Task> getTasks() {
+        return mTaskList;
+
+    }
 
 }
