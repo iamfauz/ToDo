@@ -7,6 +7,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -127,7 +128,10 @@ public class AddTaskActivity extends AppCompatActivity {
 
                 addTaskToDb();
 
+
             }
+
+
         });
 
     }
@@ -173,6 +177,7 @@ public class AddTaskActivity extends AppCompatActivity {
         Date date = DateHelper.getDate(dueDate + ", " + dueTime);
 
         final Task task = new Task(description, category, date);
+        TaskReminderUtilities.scheduleChargingReminder(AddTaskActivity.this, task);
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {

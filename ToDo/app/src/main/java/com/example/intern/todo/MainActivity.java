@@ -16,6 +16,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.firebase.jobdispatcher.Driver;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -89,12 +93,19 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
 
+                //For cancelling notification job service
+                Driver driver = new GooglePlayDriver(MainActivity.this);
+                final FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
+
+
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
                         int position = viewHolder.getAdapterPosition();
                         List<Task> tasks = mTaskAdapter.getTasks();
-                        mDb.taskDao().deleteTask(tasks.get(position));
+                        Task task = tasks.get(position);
+                        dispatcher.cancel(task.getId() + "");
+                        mDb.taskDao().deleteTask(task);
                     }
                 });
 
