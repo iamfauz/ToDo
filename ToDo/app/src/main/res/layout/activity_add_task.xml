@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddTaskActivity"
     android:background="@color/colorDarkGrey"
+    tools:context=".AddTaskActivity"
 
     >
 
@@ -13,119 +13,128 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:orientation="vertical"
-        android:padding="10dp"
-        >
+        android:padding="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:text="Task"
                 android:textColor="@color/androidGreen"
-                android:textSize="15sp"
-                android:layout_marginTop="5dp"
-                />
+                android:textSize="15sp" />
+
             <EditText
                 android:id="@+id/task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Task"
                 android:backgroundTint="@color/androidGreen"
+                android:hint="Enter Task"
                 android:textColor="@color/colorWhite"
+                android:textColorHint="@color/colorCardBackground"
+                android:singleLine="true"
                 />
-
-
 
 
         </LinearLayout>
 
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="5dp"
-        >
-
-        <TextView
-
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Category"
-            android:textColor="@color/androidGreen"
-            android:textSize="15sp"
             android:layout_marginTop="5dp"
-            />
-        <EditText
-            android:id="@+id/category"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Due Date"
+                android:textColor="@color/androidGreen"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/androidGreen"
+                android:focusableInTouchMode="false"
+                android:hint="Enter Due Date"
+                android:inputType="date"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/colorCardBackground"
+
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Category"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:backgroundTint="@color/androidGreen"
+                android:text="Due Time"
+                android:textColor="@color/androidGreen"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/androidGreen"
+                android:focusableInTouchMode="false"
+                android:hint="Enter Due Time"
+                android:inputType="date"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/colorCardBackground" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Category"
+                android:textColor="@color/androidGreen"
+                android:textSize="15sp" />
+
+
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:backgroundTint="@color/androidGreen"
+            android:popupBackground="@color/backgroundColor"
+            android:popupElevation="5dp"
+            android:prompt="@color/colorWhite"
             android:textColor="@color/colorWhite"
 
+
             />
-    </LinearLayout>
-
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="5dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Due Date"
-            android:textColor="@color/androidGreen"
-            android:textSize="15sp"
-            android:layout_marginTop="5dp"
-            />
-        <EditText
-            android:id="@+id/date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Due Date"
-            android:backgroundTint="@color/androidGreen"
-            android:textColor="@color/colorWhite"
-            />
-    </LinearLayout>
-
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="5dp"
-        >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Due Time"
-            android:textColor="@color/androidGreen"
-            android:textSize="15sp"
-            android:layout_marginTop="5dp"
-            android:backgroundTint="@color/androidGreen"
-            />
-        <EditText
-            android:id="@+id/time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Due Time"
-            android:backgroundTint="@color/androidGreen"
-            android:textColor="@color/colorWhite"
-            />
-    </LinearLayout>
 
     </LinearLayout>
 
@@ -140,13 +149,12 @@
 
         android:layout_marginBottom="32dp"
         android:layout_marginEnd="30dp"
-        app:fabSize="normal"
+        android:backgroundTint="@color/androidGreen"
         android:src="@drawable/ic_send_black_24dp"
         android:tint="@android:color/white"
-        android:backgroundTint="@color/androidGreen"
         app:borderWidth="0dp"
         app:elevation="6dp"
-
+        app:fabSize="normal"
 
 
         />

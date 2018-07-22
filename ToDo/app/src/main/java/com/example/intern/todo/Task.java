@@ -8,7 +8,7 @@ import android.arch.persistence.room.TypeConverters;
 
 import java.util.Date;
 
-@Entity(tableName = "tasks")
+@Entity(tableName = "task")
 public class Task {
 
     @PrimaryKey(autoGenerate = true)

@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface TaskDao {
 
-    @Query("SELECT * FROM tasks")
+    @Query("SELECT * FROM task")
     LiveData<List<Task>> loadAllTasks();
 
     @Insert
@@ -26,10 +26,10 @@ public interface TaskDao {
     @Delete
     void deleteTask(Task task);
 
-    @Query("SELECT * FROM tasks WHERE id = :id")
+    @Query("SELECT * FROM task WHERE id = :id")
     LiveData<Task> loadTaskById(int id);
 
-    @Query("SELECT * FROM tasks WHERE category = :category")
+    @Query("SELECT * FROM task WHERE category = :category")
     List<Task> loadTasksByCategory(String category);
 
 

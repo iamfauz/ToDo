@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#A3CB38</color>
     <color name="androidGreen">#A3CB38</color>
     <color name="colorCardBackground">#424242</color>
     <color name="backgroundColor">#303030</color>
