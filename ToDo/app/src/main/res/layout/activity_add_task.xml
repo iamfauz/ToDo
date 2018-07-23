@@ -33,9 +33,14 @@
                 android:textColor="@color/androidGreen"
                 android:textSize="15sp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
             <EditText
                 android:id="@+id/task"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/androidGreen"
                 android:hint="Enter Task"
@@ -43,7 +48,18 @@
                 android:textColorHint="@color/colorCardBackground"
                 android:singleLine="true"
                 />
+                -->
+                <ImageView
+                    android:id="@+id/task_button"
+                    android:layout_width="30dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/ic_event_note_black_24dp"
 
+                    />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -62,9 +78,15 @@
                 android:textColor="@color/androidGreen"
                 android:textSize="15sp" />
 
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
             <EditText
                 android:id="@+id/date"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/androidGreen"
                 android:focusableInTouchMode="false"
@@ -74,6 +96,18 @@
                 android:textColorHint="@color/colorCardBackground"
 
                 />
+
+
+                <ImageView
+                    android:id="@+id/dateButton"
+                    android:layout_width="30dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/ic_date_range_black_24dp"
+
+                    />
+        </LinearLayout>
         </LinearLayout>
 
 
@@ -92,9 +126,14 @@
                 android:textColor="@color/androidGreen"
                 android:textSize="15sp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
             <EditText
                 android:id="@+id/time"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/androidGreen"
                 android:focusableInTouchMode="false"
@@ -102,6 +141,17 @@
                 android:inputType="date"
                 android:textColor="@color/colorWhite"
                 android:textColorHint="@color/colorCardBackground" />
+
+                <ImageView
+                    android:id="@+id/timeButton"
+                    android:layout_width="30dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/ic_access_time_black_24dp"
+
+                    />
+        </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -119,22 +169,57 @@
                 android:textColor="@color/androidGreen"
                 android:textSize="15sp" />
 
+            <Spinner
+                android:id="@+id/spinner_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:backgroundTint="@color/androidGreen"
+                android:popupBackground="@color/backgroundColor"
+                android:popupElevation="5dp"
+                android:prompt="@color/colorWhite"
+                android:textColor="@color/colorWhite"
+
+
+                />
+
 
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/spinner"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:backgroundTint="@color/androidGreen"
-            android:popupBackground="@color/backgroundColor"
-            android:popupElevation="5dp"
-            android:prompt="@color/colorWhite"
-            android:textColor="@color/colorWhite"
+            android:orientation="vertical">
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Notifcation"
+                android:textColor="@color/androidGreen"
+                android:textSize="15sp" />
+
+            <Spinner
+                android:id="@+id/spinner_notification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:backgroundTint="@color/androidGreen"
+                android:popupBackground="@color/backgroundColor"
+                android:popupElevation="5dp"
+                android:prompt="@color/colorWhite"
+                android:textColor="@color/colorWhite"
 
 
-            />
+                />
+
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 

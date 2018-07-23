@@ -13,12 +13,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
@@ -36,6 +38,14 @@ public class AddTaskActivity extends AppCompatActivity {
     // Extra for the task ID to be received in the intent when update is to be done to the task
     public static final String FLAG_UPDATE_ID = "flagUpdateID";
 
+
+    // Extra for the notification ID to be received in the intent when update is to be done to the task
+    public static final String NOTIFICATION_UPDATE_ID = "notificationUpdateID";
+
+    // Extra for the notification ID to be received after rotation
+    public static final String NOTIFICATION_TASK_ID = "notificationinstanceUpdateID";
+
+
     // Extra for the task ID to be received after rotation
     public static final String INSTANCE_TASK_ID = "instanceTaskId";
 
@@ -47,14 +57,21 @@ public class AddTaskActivity extends AppCompatActivity {
 
     private int mTaskId = DEFAULT_TASK_ID;
 
+    private int mNotificationId = DEFAULT_TASK_ID;
+
+    private static int id = 0;
+
     @BindView(R.id.fab)
     FloatingActionButton fabButton;
 
     @BindView(R.id.task)
     EditText taskEditText;
 
-    @BindView(R.id.spinner)
+    @BindView(R.id.spinner_category)
     Spinner categorySpinner;
+
+    @BindView(R.id.spinner_notification)
+    Spinner notificationSpinner;
 
     @BindView(R.id.date)
     EditText dueDateEditText;
@@ -62,12 +79,21 @@ public class AddTaskActivity extends AppCompatActivity {
     @BindView(R.id.time)
     EditText dueTimeEditText;
 
+    @BindView(R.id.dateButton)
+    ImageView dateIcon;
 
-    //Spinner Items
-    private ArrayList<String> spinnerList = new ArrayList<>(Arrays.asList("Default",
+    @BindView(R.id.timeButton)
+    ImageView timeIcon;
+
+
+    //Category Spinner Items
+    private ArrayList<String> categorySpinnerList = new ArrayList<>(Arrays.asList("Default",
             "Personal",
             "Work",
             "Shopping"));
+
+    //Notification Spinner Items
+    private ArrayList<String> notificationSpinnerList;
 
     // Member variable for the Database
     private AppDatabase mDb;
@@ -81,15 +107,16 @@ public class AddTaskActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setupFabButton();
-        setupSpinner();
+        setupSpinners();
         setupDateAndTimePicker();
 
         //Get Database instance
         mDb = AppDatabase.getInstance(getApplicationContext());
 
         //Handling configuration changes due to rotation
-        if (savedInstanceState != null && savedInstanceState.containsKey(INSTANCE_TASK_ID)) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(INSTANCE_TASK_ID) && savedInstanceState.containsKey(NOTIFICATION_TASK_ID)) {
             mTaskId = savedInstanceState.getInt(INSTANCE_TASK_ID, DEFAULT_TASK_ID);
+            mNotificationId = savedInstanceState.getInt(NOTIFICATION_TASK_ID, DEFAULT_TASK_ID);
         }
 
         Intent intent = getIntent();
@@ -98,6 +125,7 @@ public class AddTaskActivity extends AppCompatActivity {
             if (mTaskId == DEFAULT_TASK_ID) {
                 // populate the UI
                 mTaskId = intent.getIntExtra(FLAG_UPDATE_ID, DEFAULT_TASK_ID);
+                mNotificationId = intent.getIntExtra(NOTIFICATION_UPDATE_ID, DEFAULT_TASK_ID);
                 AddTaskViewModelFactory factory = new AddTaskViewModelFactory(mDb, mTaskId);
                 final AddTaskViewModel viewModel
                         = ViewModelProviders.of(this, factory).get(AddTaskViewModel.class);
@@ -106,6 +134,8 @@ public class AddTaskActivity extends AppCompatActivity {
                 viewModel.getTask().observe(this, new Observer<Task>() {
                     @Override
                     public void onChanged(@Nullable Task taskEntry) {
+
+                        Log.d("TEST", "Hyyyyyy");
                         viewModel.getTask().removeObserver(this);
                         populateUI(taskEntry);
                     }
@@ -127,24 +157,25 @@ public class AddTaskActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 addTaskToDb();
-
-
             }
-
-
         });
 
     }
 
     /**
-     * Method to setup Spinner
+     * Method to setup Spinners ( category and notification )
      */
-    public void setupSpinner() {
+    public void setupSpinners() {
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, spinnerList);
-        adapter.setDropDownViewResource(R.layout.spin_item);
-        categorySpinner.setAdapter(adapter);
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, categorySpinnerList);
+        categoryAdapter.setDropDownViewResource(R.layout.spin_item);
+        categorySpinner.setAdapter(categoryAdapter);
+
+        notificationSpinnerList = TaskReminderUtilities.notificationSpinnerList;
+        ArrayAdapter<String> notificationAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, notificationSpinnerList);
+        notificationAdapter.setDropDownViewResource(R.layout.spin_item);
+        notificationSpinner.setAdapter(notificationAdapter);
 
     }
 
@@ -157,37 +188,48 @@ public class AddTaskActivity extends AppCompatActivity {
         String category = categorySpinner.getSelectedItem().toString();
         String dueDate = dueDateEditText.getText().toString();
         String dueTime = dueTimeEditText.getText().toString();
+        String notificationInterval = notificationSpinner.getSelectedItem().toString();
 
 
-        if(TextUtils.isEmpty(taskEditText.getText().toString())) {
+        if (TextUtils.isEmpty(taskEditText.getText().toString())) {
             taskEditText.setError("Can't leave field empty.");
             return;
         }
 
-        if(TextUtils.isEmpty(dueDateEditText.getText().toString())) {
-           dueDateEditText.setError("Can't leave field empty.");
+        if (TextUtils.isEmpty(dueDateEditText.getText().toString())) {
+            dueDateEditText.setError("Can't leave field empty.");
             return;
         }
-        if(TextUtils.isEmpty(dueTimeEditText.getText().toString())) {
+        if (TextUtils.isEmpty(dueTimeEditText.getText().toString())) {
             dueTimeEditText.setError("Can't leave field empty.");
             return;
         }
 
 
         Date date = DateHelper.getDate(dueDate + ", " + dueTime);
-
-        final Task task = new Task(description, category, date);
-        TaskReminderUtilities.scheduleChargingReminder(AddTaskActivity.this, task);
+        Log.d("TEST", String.valueOf(id));
+        final Task task = new Task(description, category, date, notificationInterval);
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 if (mTaskId == DEFAULT_TASK_ID) {
                     // insert new task
+                    id++;
+                    task.setNotificationID(id);
                     mDb.taskDao().insertTask(task);
+                    TaskReminderUtilities.scheduleTaskReminder(getApplicationContext(), task);
                 } else {
                     //update task
                     task.setId(mTaskId);
+                    task.setNotificationID(mNotificationId);
                     mDb.taskDao().updateTask(task);
+
+                    //Cancelling old notification service
+                    if (!task.getNotificationInterval().equals(TaskReminderUtilities.notificationSpinnerList.get(0)))
+                        TaskReminderUtilities.deleteReminder(task, getApplicationContext());
+
+                    //Starting new notification service
+                    TaskReminderUtilities.scheduleTaskReminder(getApplicationContext(), task);
                 }
                 finish();
             }
@@ -206,7 +248,8 @@ public class AddTaskActivity extends AppCompatActivity {
 
         }
         taskEditText.setText(task.getDescription());
-        categorySpinner.setSelection(spinnerList.indexOf(task.getCategory()));
+        categorySpinner.setSelection(categorySpinnerList.indexOf(task.getCategory()));
+        notificationSpinner.setSelection(notificationSpinnerList.indexOf(task.getNotificationInterval()));
         dueDateEditText.setText(DateHelper.getDateString(task.getDueDate(), "dd MMM, yyyy"));
         dueTimeEditText.setText(DateHelper.getDateString(task.getDueDate(), "hh:mm a"));
 
@@ -224,32 +267,15 @@ public class AddTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                // Get Current Date
-                final Calendar c = Calendar.getInstance();
-                int mYear = c.get(Calendar.YEAR);
-                int mMonth = c.get(Calendar.MONTH);
-                int mDay = c.get(Calendar.DAY_OF_MONTH);
+                showDatePickerDialog();
 
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddTaskActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-
-
-                                Date date = DateHelper.getDate(year, monthOfYear, dayOfMonth);
-
-
-                                dueDateEditText.setText(DateHelper.getDateString(date, "dd MMM, yyyy"));
-
-
-                            }
-                        }, mYear, mMonth, mDay);
-                datePickerDialog.show();
-
-
+            }
+        });
+        dateIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
             }
         });
 
@@ -259,34 +285,80 @@ public class AddTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                // Get Current Date
-                final Calendar c = Calendar.getInstance();
-                int mHour = c.get(Calendar.HOUR_OF_DAY);
-                int mMinute = c.get(Calendar.MINUTE);
-
-
-                // Launch Time Picker Dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(AddTaskActivity.this,
-                        new TimePickerDialog.OnTimeSetListener() {
-
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay,
-                                                  int minute) {
-
-                                Date date = DateHelper.getDate(hourOfDay, minute);
-                                dueTimeEditText.setText(DateHelper.getDateString(date, "hh:mm a"));
-                            }
-                        }, mHour, mMinute, false);
-                timePickerDialog.show();
+                showTimePickerDialog();
             }
 
         });
+
+
+        timeIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimePickerDialog();
+            }
+        });
+
+    }
+
+    public void showDatePickerDialog() {
+
+        // Get Current Date
+        final Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(AddTaskActivity.this,
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+
+                        Date date = DateHelper.getDate(year, monthOfYear, dayOfMonth);
+
+
+                        dueDateEditText.setText(DateHelper.getDateString(date, "dd MMM, yyyy"));
+
+
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
+
+
+    }
+
+
+    public void showTimePickerDialog() {
+
+
+        // Get Current Date
+        final Calendar c = Calendar.getInstance();
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
+
+
+        // Launch Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(AddTaskActivity.this,
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+
+                        Date date = DateHelper.getDate(hourOfDay, minute);
+                        dueTimeEditText.setText(DateHelper.getDateString(date, "hh:mm a"));
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
+
 
     }
 
 
     /**
-     *
      * Hiding keyboard when pressed anywhere else on the screen
      */
 
@@ -308,9 +380,10 @@ public class AddTaskActivity extends AppCompatActivity {
         }
         return super.dispatchTouchEvent(ev);
     }
+
     public static void hideKeyboard(Activity activity) {
         if (activity != null && activity.getWindow() != null && activity.getWindow().getDecorView() != null) {
-            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
         }
     }
@@ -319,6 +392,7 @@ public class AddTaskActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(INSTANCE_TASK_ID, mTaskId);
+        outState.putInt(NOTIFICATION_TASK_ID, mNotificationId);
         super.onSaveInstanceState(outState);
     }
 

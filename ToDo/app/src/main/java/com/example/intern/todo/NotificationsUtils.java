@@ -49,7 +49,7 @@ public class NotificationsUtils {
                 .setContentText(date)
 
                 .setDefaults(Notification.DEFAULT_VIBRATE)
-                .setContentIntent(contentIntent(context, id))
+                .setContentIntent(contentIntent(context))
                 .setAutoCancel(true);
 
         //Supporting backward compatability
@@ -66,7 +66,7 @@ public class NotificationsUtils {
     /** This method will create the pending intent which will trigger when
      * the notification is pressed. This pending intent should open up the MainActivity.
      */
-    private static PendingIntent contentIntent(Context context, int id) {
+    private static PendingIntent contentIntent(Context context) {
 
         Intent startActivityIntent = new Intent(context, MainActivity.class);
 

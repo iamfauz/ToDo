@@ -51,19 +51,6 @@ public class TaskReminderFirebaseJobService extends com.firebase.jobdispatcher.J
     @Override
     public boolean onStopJob(com.firebase.jobdispatcher.JobParameters job) {
         if (mBackgroundTask != null) mBackgroundTask.cancel(true);
-        return true;
+        return false;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

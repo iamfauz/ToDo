@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.firebase.jobdispatcher.Driver;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
     @BindView(R.id.recycler_view_tasks)
     RecyclerView mRecyclerView;
 
+    @BindView(R.id.app_logo)
+    ImageView appLogo;
 
     @BindView(R.id.fab)
     FloatingActionButton fabButton;
@@ -93,18 +96,16 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
 
-                //For cancelling notification job service
-                Driver driver = new GooglePlayDriver(MainActivity.this);
-                final FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
-
-
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
                         int position = viewHolder.getAdapterPosition();
                         List<Task> tasks = mTaskAdapter.getTasks();
                         Task task = tasks.get(position);
-                        dispatcher.cancel(task.getId() + "");
+
+                        if (!task.getNotificationInterval().equals(TaskReminderUtilities.notificationSpinnerList.get(0)))
+                            TaskReminderUtilities.deleteReminder(task, getApplicationContext()); //Cancelling Notification service
+
                         mDb.taskDao().deleteTask(task);
                     }
                 });
@@ -140,7 +141,19 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
         viewModel.getTasks().observe(this, new Observer<List<Task>>() {
             @Override
             public void onChanged(@Nullable List<Task> taskEntries) {
-                mTaskAdapter.setTasksData(taskEntries);
+
+                Log.d("TEST", "HERERRERE");
+
+                if (taskEntries.size() == 0) {
+
+                    mRecyclerView.setVisibility(View.GONE);
+                    appLogo.setVisibility(View.VISIBLE);
+
+                } else {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    appLogo.setVisibility(View.INVISIBLE);
+                    mTaskAdapter.setTasksData(taskEntries);
+                }
             }
         });
 
@@ -152,10 +165,10 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
         // Launch AddTaskActivity adding the itemId as an extra in the intent
         Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
         intent.putExtra(AddTaskActivity.FLAG_UPDATE_ID, task.getId());
+        intent.putExtra(AddTaskActivity.NOTIFICATION_UPDATE_ID, task.getId());
         startActivity(intent);
 
     }
-
 
 
     @Override
@@ -174,7 +187,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
 
         if (id == R.id.About) {
 
-
+            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(intent);
 
             return true;
         }
