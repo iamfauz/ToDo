@@ -47,6 +47,17 @@ public class Task {
     }
 
 
+    public  boolean isOverdueTask(){
+
+    Date today = new Date();
+
+    return dueDate.before(today);
+
+
+    }
+
+
+
     //Getters And Setters
 
     public int getId() {
@@ -97,4 +108,8 @@ public class Task {
     public void setNotificationID(int notificationID) {
         this.notificationID = notificationID;
     }
+
+
+
+
 }

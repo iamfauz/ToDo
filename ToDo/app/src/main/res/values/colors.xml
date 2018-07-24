@@ -9,6 +9,8 @@
     <color name="colorWhite">#ffffff</color>
     <color name="lightGreyBackground">#F0F0F0</color>
     <color name="colorDarkGrey">#212121</color>
+    <color name="monza">#CF000F</color>
+    <color name="pom">#F22613</color>
 
 
 </resources>

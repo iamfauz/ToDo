@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
         TextView descriptionTextView;
         public @BindView(R.id.date)
         TextView dateTextView;
+        public @BindView(R.id.overdue)
+        TextView overdueTextView;
 
         public Task task;
 
@@ -87,33 +90,38 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
 
     @Override
     public void onBindViewHolder(@NonNull TaskAdapterViewHolder holder, int position) {
+        Task task = mTaskList.get(position);
+        holder.task = task;
+        holder.descriptionTextView.setText(task.getDescription());
+        holder.dateTextView.setText(DateHelper.getDateString(task.getDueDate(), "dd MMM, yyyy, hh:mm a"));
 
-        holder.task = mTaskList.get(position);
-        holder.descriptionTextView.setText(mTaskList.get(position).getDescription());
-        holder.dateTextView.setText(DateHelper.getDateString(mTaskList.get(position).getDueDate(), "dd MMM, yyyy, hh:mm a"));
+        if (task.isOverdueTask())
+            holder.overdueTextView.setVisibility(View.VISIBLE);
+        else
+            holder.overdueTextView.setVisibility(View.INVISIBLE);
 
+        Log.d("ONBIND", "ONBINDINGNGNGN");
+
+    }
+        @Override
+        public int getItemCount () {
+
+            if (mTaskList == null)
+                return 0;
+            else
+                return mTaskList.size();
         }
 
 
-    @Override
-    public int getItemCount() {
-
-        if (mTaskList == null)
-            return 0;
-        else
-            return mTaskList.size();
-    }
+        public void setTasksData (List < Task > taskList) {
+            mTaskList = taskList;
+            notifyDataSetChanged();
+        }
 
 
-    public void setTasksData(List<Task> taskList) {
-        mTaskList = taskList;
-        notifyDataSetChanged();
-    }
+        public List<Task> getTasks () {
+            return mTaskList;
 
-
-    public List<Task> getTasks() {
-        return mTaskList;
+        }
 
     }
-
-}
