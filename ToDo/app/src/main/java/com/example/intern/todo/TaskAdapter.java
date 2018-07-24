@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -21,6 +22,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
 
     //Data store
     List<Task> mTaskList;
+    List<Task> mTaskListCopy;
 
     //Handling Clicks
     public interface ListItemClickListener {
@@ -35,6 +37,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
     public TaskAdapter(ListItemClickListener listener) {
 
         mOnclickListener = listener;
+
 
     }
 
@@ -115,6 +118,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
 
         public void setTasksData (List < Task > taskList) {
             mTaskList = taskList;
+            mTaskListCopy  = new ArrayList<>();
+
+            if(mTaskList != null && !mTaskList.isEmpty())
+                mTaskListCopy.addAll(mTaskList);
+                Log.d("Search", "adapter");
+
             notifyDataSetChanged();
         }
 
@@ -123,5 +132,30 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
             return mTaskList;
 
         }
+
+    /**
+     * Filter for search functionality
+     * @param text
+     */
+    public void filter(String text) {
+        if(mTaskListCopy != null && !mTaskListCopy.isEmpty() ) {
+            mTaskList.clear();
+            if (text.isEmpty()) {
+                Log.d("Search", "filter");
+                mTaskList.addAll(mTaskListCopy);
+            } else {
+                Log.d("Search", "filter1");
+                text = text.toLowerCase();
+                for (Task task : mTaskListCopy) {
+                    if (task.getDescription().toLowerCase().contains(text) || DateHelper.getDateString(task.getDueDate(), "dd MMM, yyyy, hh:mm a").toLowerCase().contains(text)) {
+                        mTaskList.add(task);
+                    }
+                }
+            }
+            notifyDataSetChanged();
+
+        }
+    }
+
 
     }

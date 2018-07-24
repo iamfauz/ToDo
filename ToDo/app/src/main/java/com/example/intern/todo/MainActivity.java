@@ -1,10 +1,14 @@
 package com.example.intern.todo;
 
+import android.app.Activity;
+import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,8 +18,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.firebase.jobdispatcher.Driver;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -38,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
     @BindView(R.id.fab)
     FloatingActionButton fabButton;
 
+
+
     TaskAdapter mTaskAdapter;
     private AppDatabase mDb;
 
@@ -59,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
         //Setup ViewModel
         setupViewModel();
 
+        handleIntent(getIntent());
     }
 
     /**
@@ -145,7 +157,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
                 Log.d("TEST", "HERERRERE");
 
                 if (taskEntries.size() == 0) {
-
+                    Log.d("Search", "main");
+                    mTaskAdapter.setTasksData(taskEntries);
                     mRecyclerView.setVisibility(View.GONE);
                     appLogo.setVisibility(View.VISIBLE);
 
@@ -177,9 +190,67 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
         MenuInflater inflater = getMenuInflater();
         /* Use the inflater's inflate method to inflate our menu layout to this menu */
         inflater.inflate(R.menu.menu_main, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        MenuItem mSearchMenuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) mSearchMenuItem.getActionView();
+
+
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mTaskAdapter.filter(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mTaskAdapter.filter(newText);
+                return true;
+            }
+        } );
+
+
+        mSearchMenuItem.setOnActionExpandListener( new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                mTaskAdapter.filter("");
+                return true;
+            }
+        });
+
         /* Return true so that the menu is displayed in the Toolbar */
         return true;
     }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+
+        handleIntent(intent);
+    }
+
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Log.d("Voice", query);
+            mTaskAdapter.filter(query);
+        }
+    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -195,4 +266,38 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    /**
+     * Hiding keyboard when pressed anywhere else on the screen
+     */
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        View v = getCurrentFocus();
+
+        if (v != null &&
+                (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) &&
+                v instanceof EditText &&
+                !v.getClass().getName().startsWith("android.webkit.")) {
+            int scrcoords[] = new int[2];
+            v.getLocationOnScreen(scrcoords);
+            float x = ev.getRawX() + v.getLeft() - scrcoords[0];
+            float y = ev.getRawY() + v.getTop() - scrcoords[1];
+
+            if (x < v.getLeft() || x > v.getRight() || y < v.getTop() || y > v.getBottom())
+                hideKeyboard(this);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        if (activity != null && activity.getWindow() != null && activity.getWindow().getDecorView() != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
+        }
+    }
+
+
+
 }
