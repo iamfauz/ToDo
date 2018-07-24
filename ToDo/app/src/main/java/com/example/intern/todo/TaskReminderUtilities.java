@@ -19,11 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TaskReminderUtilities {
 
-
-    private static int REMINDER_INTERVAL_SECONDS = 0;
-    private static int SYNC_FLEXTIME_SECONDS = 0;
     private static FirebaseJobDispatcher dispatcher;
-
 
     //Notification Spinner Items
     public static ArrayList<String> notificationSpinnerList = new ArrayList<>(Arrays.asList("No Notication",
@@ -45,8 +41,9 @@ public class TaskReminderUtilities {
             extrasBundle.putString("date", DateHelper.getDateString(task.getDueDate(), "dd MMM, yyyy, hh:mm a"));
             extrasBundle.putInt("id", task.getNotificationID());
 
-            //Setup notification intervals
-            setInterval(task);
+            //Getting notification interval in seconds according to task
+            int reminderIntervalSeconds = getReminderIntervalSeconds(task);
+            Log.d("TEST", String.valueOf(reminderIntervalSeconds));
 
             Job TaskReminderJob = dispatcher.newJobBuilder()
 
@@ -55,8 +52,8 @@ public class TaskReminderUtilities {
                     .setLifetime(Lifetime.FOREVER)
                     .setRecurring(true)
                     .setTrigger(Trigger.executionWindow(
-                            30,
-                            60))
+                            reminderIntervalSeconds,
+                            reminderIntervalSeconds * 2))
                     .setReplaceCurrent(true)
                     .setExtras(extrasBundle)
                     .build();
@@ -69,7 +66,6 @@ public class TaskReminderUtilities {
 
     /**
      * Method that cancels notification service of a particular task
-     *
      */
     public static void deleteReminder(Task task, Context context) {
 
@@ -89,37 +85,35 @@ public class TaskReminderUtilities {
 
     /**
      * Method that defines notification intervals according to the task
-     *
      */
-    private static void setInterval(Task task) {
+    private static int getReminderIntervalSeconds(Task task) {
 
         switch (task.getNotificationInterval()) {
 
-
             case "Repeat every hour":
 
-                REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.HOURS.toSeconds(1));
+                return (int) (TimeUnit.HOURS.toSeconds(1));
 
             case "Repeat once a day":
 
-                REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.DAYS.toSeconds(1));
+                return (int) (TimeUnit.DAYS.toSeconds(1));
 
             case "Repeat once a week":
 
-                REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.HOURS.toSeconds(168));
+                return (int) (TimeUnit.HOURS.toSeconds(168));
 
             case "Repeat once a month":
 
-                REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.HOURS.toSeconds(730));
+                return (int) (TimeUnit.HOURS.toSeconds(730));
 
             case "Repeat once a year":
 
-                REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.HOURS.toSeconds(8760));
+                return (int) (TimeUnit.HOURS.toSeconds(8760));
 
 
         }
 
-        SYNC_FLEXTIME_SECONDS = REMINDER_INTERVAL_SECONDS;
+        return 0; //never reach
 
 
     }

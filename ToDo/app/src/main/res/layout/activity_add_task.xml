@@ -55,7 +55,8 @@
                     android:layout_height="35dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"
-                    android:src="@drawable/ic_event_note_black_24dp"
+                    android:src="@drawable/ic_keyboard_voice_black_24dp"
+                    android:onClick="getSpeechInput"
 
                     />
 
