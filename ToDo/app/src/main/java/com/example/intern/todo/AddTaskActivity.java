@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -39,14 +40,6 @@ public class AddTaskActivity extends AppCompatActivity {
 
     // Extra for the task ID to be received in the intent when update is to be done to the task
     public static final String FLAG_UPDATE_ID = "flagUpdateID";
-
-
-    // Extra for the notification ID to be received in the intent when update is to be done to the task
-    public static final String NOTIFICATION_UPDATE_ID = "notificationUpdateID";
-
-    // Extra for the notification ID to be received after rotation
-    public static final String NOTIFICATION_TASK_ID = "notificationinstanceUpdateID";
-
 
     // Extra for the task ID to be received after rotation
     public static final String INSTANCE_TASK_ID = "instanceTaskId";
@@ -116,9 +109,9 @@ public class AddTaskActivity extends AppCompatActivity {
         mDb = AppDatabase.getInstance(getApplicationContext());
 
         //Handling configuration changes due to rotation
-        if (savedInstanceState != null && savedInstanceState.containsKey(INSTANCE_TASK_ID) && savedInstanceState.containsKey(NOTIFICATION_TASK_ID)) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(INSTANCE_TASK_ID) ) {
             mTaskId = savedInstanceState.getInt(INSTANCE_TASK_ID, DEFAULT_TASK_ID);
-            mNotificationId = savedInstanceState.getInt(NOTIFICATION_TASK_ID, DEFAULT_TASK_ID);
+
         }
 
         Intent intent = getIntent();
@@ -127,7 +120,7 @@ public class AddTaskActivity extends AppCompatActivity {
             if (mTaskId == DEFAULT_TASK_ID) {
                 // populate the UI
                 mTaskId = intent.getIntExtra(FLAG_UPDATE_ID, DEFAULT_TASK_ID);
-                mNotificationId = intent.getIntExtra(NOTIFICATION_UPDATE_ID, DEFAULT_TASK_ID);
+
                 AddTaskViewModelFactory factory = new AddTaskViewModelFactory(mDb, mTaskId);
                 final AddTaskViewModel viewModel
                         = ViewModelProviders.of(this, factory).get(AddTaskViewModel.class);
@@ -209,22 +202,22 @@ public class AddTaskActivity extends AppCompatActivity {
 
 
         Date date = DateHelper.getDate(dueDate + ", " + dueTime);
-        Log.d("TEST", String.valueOf(id));
+
         final Task task = new Task(description, category, date, notificationInterval);
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 if (mTaskId == DEFAULT_TASK_ID) {
                     // insert new task
-                    id++;
-                    task.setNotificationID(id);
                     mDb.taskDao().insertTask(task);
-                    TaskReminderUtilities.scheduleTaskReminder(getApplicationContext(), task);
+                    List<Task> tasks = mDb.taskDao().loadLatestAddedTask();
+                    TaskReminderUtilities.scheduleTaskReminder(getApplicationContext(), tasks.get(0));
+
                 } else {
                     //update task
                     task.setId(mTaskId);
-                    task.setNotificationID(mNotificationId);
                     mDb.taskDao().updateTask(task);
+                    Log.d("TESTNEW", String.valueOf(task.getId()));
 
                     //Cancelling old notification service
                     if (!task.getNotificationInterval().equals(TaskReminderUtilities.notificationSpinnerList.get(0)))
@@ -393,7 +386,7 @@ public class AddTaskActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(INSTANCE_TASK_ID, mTaskId);
-        outState.putInt(NOTIFICATION_TASK_ID, mNotificationId);
+
         super.onSaveInstanceState(outState);
     }
 

@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
         // Launch AddTaskActivity adding the itemId as an extra in the intent
         Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
         intent.putExtra(AddTaskActivity.FLAG_UPDATE_ID, task.getId());
-        intent.putExtra(AddTaskActivity.NOTIFICATION_UPDATE_ID, task.getId());
+
         startActivity(intent);
 
     }

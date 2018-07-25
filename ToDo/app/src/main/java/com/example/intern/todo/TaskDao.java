@@ -17,6 +17,9 @@ public interface TaskDao {
     @Query("SELECT * FROM task")
     LiveData<List<Task>> loadAllTasks();
 
+    @Query("SELECT * FROM task ORDER BY id DESC LIMIT 1")
+    List<Task> loadLatestAddedTask();
+
     @Insert
     void insertTask(Task task);
 

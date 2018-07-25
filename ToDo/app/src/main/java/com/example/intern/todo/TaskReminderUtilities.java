@@ -39,16 +39,15 @@ public class TaskReminderUtilities {
             Bundle extrasBundle = new Bundle();
             extrasBundle.putString("task", task.getDescription());
             extrasBundle.putString("date", DateHelper.getDateString(task.getDueDate(), "dd MMM, yyyy, hh:mm a"));
-            extrasBundle.putInt("id", task.getNotificationID());
+            extrasBundle.putInt("id", task.getId());
 
             //Getting notification interval in seconds according to task
             int reminderIntervalSeconds = getReminderIntervalSeconds(task);
-            Log.d("TEST", String.valueOf(reminderIntervalSeconds));
 
             Job TaskReminderJob = dispatcher.newJobBuilder()
 
                     .setService(TaskReminderFirebaseJobService.class)
-                    .setTag(task.getNotificationID() + "")
+                    .setTag(task.getId() + "")
                     .setLifetime(Lifetime.FOREVER)
                     .setRecurring(true)
                     .setTrigger(Trigger.executionWindow(
@@ -70,8 +69,8 @@ public class TaskReminderUtilities {
     public static void deleteReminder(Task task, Context context) {
 
         dispatcher = FirebaseJobDispatcherSingleton.getInstance(context);
-        Log.d("TEST1", task.getNotificationID() + "");
-        dispatcher.cancel(task.getNotificationID() + "");
+        Log.d("TEST1", task.getId() + "");
+        dispatcher.cancel(task.getId() + "");
 
 
     }

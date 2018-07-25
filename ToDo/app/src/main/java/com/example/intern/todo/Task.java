@@ -16,7 +16,7 @@ public class Task {
     private String description;
     private String category;
     private String notificationInterval;
-    private int notificationID; // ID used to uniquely identify notification service
+
 
     @ColumnInfo(name = "due_date")
     private Date dueDate ;
@@ -33,14 +33,14 @@ public class Task {
 
     }
 
-    public Task(int id, String description, String category, Date dueDate, String notificationInterval, int notificationID) {
+    public Task(int id, String description, String category, Date dueDate, String notificationInterval) {
 
         this.id = id;
         this.description = description;
         this.category = category;
         this.dueDate = dueDate;
         this.notificationInterval = notificationInterval;
-        this.notificationID = notificationID;
+
 
     }
 
@@ -97,13 +97,7 @@ public class Task {
 
     }
 
-    public int getNotificationID() {
-        return notificationID;
-    }
 
-    public void setNotificationID(int notificationID) {
-        this.notificationID = notificationID;
-    }
 
 
 
