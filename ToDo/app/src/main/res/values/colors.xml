@@ -11,6 +11,10 @@
     <color name="colorDarkGrey">#212121</color>
     <color name="monza">#CF000F</color>
     <color name="pom">#F22613</color>
+    <color name="steelPink">#be2edd</color>
+    <color name="lavenderTea">#D980FA</color>
+    <color name="colorMartina">#1289A7</color>
+    <color name="sunflower">#f9ca24</color>
 
 
 </resources>

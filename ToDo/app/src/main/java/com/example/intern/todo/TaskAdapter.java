@@ -1,6 +1,7 @@
 package com.example.intern.todo;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.amulyakhare.textdrawable.TextDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
     List<Task> mTaskList;
     List<Task> mTaskListCopy;
 
+    Context context;
+
+    int[] colors = { R.color.androidGreen, R.color.steelPink, R.color.sunflower, R.color.colorMartina};
+
     //Handling Clicks
     public interface ListItemClickListener {
 
@@ -34,10 +41,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
     private ListItemClickListener mOnclickListener;
 
 
-    public TaskAdapter(ListItemClickListener listener) {
+    public TaskAdapter(ListItemClickListener listener , Context context) {
 
         mOnclickListener = listener;
-
+        this.context = context;
 
     }
 
@@ -52,6 +59,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
         TextView dateTextView;
         public @BindView(R.id.overdue)
         TextView overdueTextView;
+        @BindView(R.id.category_image_view)
+        ImageView categoryImageView;
 
         public Task task;
 
@@ -97,6 +106,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
         holder.task = task;
         holder.descriptionTextView.setText(task.getDescription());
         holder.dateTextView.setText(DateHelper.getDateString(task.getDueDate(), "dd MMM, yyyy, hh:mm a"));
+
+        //Circular Icon
+        TextDrawable drawable = TextDrawable.builder()
+                .buildRoundRect( task.getCategory().substring(0,1) ,
+                        context.getResources().getColor(colors[AddTaskActivity.categorySpinnerList.indexOf(task.getCategory())]), 70);
+        holder.categoryImageView.setImageDrawable(drawable);
 
         if (task.isOverdueTask())
             holder.overdueTextView.setVisibility(View.VISIBLE);

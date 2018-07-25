@@ -89,7 +89,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
 
     //Category Spinner Items
-    private ArrayList<String> categorySpinnerList = new ArrayList<>(Arrays.asList("Default",
+    public static ArrayList<String> categorySpinnerList = new ArrayList<>(Arrays.asList("Default",
             "Personal",
             "Work",
             "Shopping"));
@@ -398,6 +398,10 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
 
+
+    /**
+     * Speech Recognition functionality
+     */
     public void getSpeechInput(View view) {
 
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);

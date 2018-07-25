@@ -44,7 +44,10 @@ dependencies {
 
 
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
+    compile 'com.github.ivbaranov:materiallettericon:0.2.3'
 
     compile 'com.github.ivbaranov:materiallettericon:0.2.3'
+
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 
 }

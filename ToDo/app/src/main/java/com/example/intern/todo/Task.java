@@ -22,8 +22,6 @@ public class Task {
     private Date dueDate ;
 
 
-
-
     @Ignore //So that room uses other contructor
     public Task(String description,String category, Date dueDate, String notificationInterval) {
 
@@ -55,8 +53,6 @@ public class Task {
 
 
     }
-
-
 
     //Getters And Setters
 

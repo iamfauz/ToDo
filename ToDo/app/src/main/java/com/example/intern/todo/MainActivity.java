@@ -61,6 +61,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
         //Data Binding with ButterKnife
         ButterKnife.bind(this);
 
+        //Seeting up app logo on toolbar
+        setupToolbar();
+
         //Get db instance
         mDb = AppDatabase.getInstance(getApplicationContext());
 
@@ -84,6 +87,17 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
     }
 
     /**
+     * Method to setup Toolbar
+     */
+    public void setupToolbar(){
+
+        //Seeting up app logo on toolbar
+        getSupportActionBar().setTitle(" ToDo");
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_done_all_black_24dp);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+    }
+    /**
      * Method to initialize recyclerView
      */
     public void initRecyclerView() {
@@ -94,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
         mRecyclerView.setLayoutManager(layoutManager);
         //Improving performance
         mRecyclerView.setHasFixedSize(true);
-        mTaskAdapter = new TaskAdapter(this);
+        mTaskAdapter = new TaskAdapter(this, this);
         mRecyclerView.setAdapter(mTaskAdapter);
 
         //Touch helper to the RecyclerView to recognize when a user swipes to delete an item.
