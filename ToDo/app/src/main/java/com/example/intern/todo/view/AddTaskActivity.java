@@ -219,6 +219,16 @@ public class AddTaskActivity extends AppCompatActivity {
 
         Date date = DateHelper.getDate(dueDate + ", " + dueTime);
 
+        Date today = new Date();
+        if(date.before(today)){
+
+            Toast.makeText(this, "Due date has passed.", Toast.LENGTH_SHORT).show();
+            dueTimeEditText.setError("Due date passed.");
+            dueDateEditText.setError("Due date passed.");
+            return;
+
+        }
+
         final Task task = new Task(description, category, date, notificationInterval);
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
@@ -324,7 +334,6 @@ public class AddTaskActivity extends AppCompatActivity {
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
 
-
         DatePickerDialog datePickerDialog = new DatePickerDialog(AddTaskActivity.this,
                 new DatePickerDialog.OnDateSetListener() {
 
@@ -347,7 +356,6 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     public void showTimePickerDialog() {
-
 
         // Get Current Date
         final Calendar c = Calendar.getInstance();
@@ -403,14 +411,12 @@ public class AddTaskActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(INSTANCE_TASK_ID, mTaskId);
 
         super.onSaveInstanceState(outState);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -421,8 +427,6 @@ public class AddTaskActivity extends AppCompatActivity {
         /* Return true so that the menu is displayed in the Toolbar */
         return true;
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

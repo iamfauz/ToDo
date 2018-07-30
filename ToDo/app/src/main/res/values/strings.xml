@@ -6,4 +6,6 @@
     <string name="github">https://github.com/iamfauz</string>
     <string name="linkedin">https://linkedin.com/in/iamfauz</string>
     <string name="twitter">https://twitter.com/iamfauz_</string>
+    <string name="notification_reminder">Deadline is approaching, complete your damn work!</string>
+
 </resources>

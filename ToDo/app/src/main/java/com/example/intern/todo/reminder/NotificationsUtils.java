@@ -6,6 +6,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -50,7 +53,6 @@ public class NotificationsUtils {
                 .setSmallIcon(R.drawable.ic_done_all_black_24dp)
                 .setContentTitle(task)
                 .setContentText(date)
-
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setContentIntent(contentIntent(context))
                 .setAutoCancel(true);
@@ -79,6 +81,7 @@ public class NotificationsUtils {
                 startActivityIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
+
 
 
 

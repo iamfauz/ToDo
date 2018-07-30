@@ -31,7 +31,6 @@ public class TaskReminderUtilities {
             "Repeat once a month",
             "Repeat once a year"));
 
-
     synchronized public static void scheduleTaskReminder(@NonNull final Context context, Task task) {
 
         if (!task.getNotificationInterval().equals(notificationSpinnerList.get(0))) {
@@ -44,6 +43,7 @@ public class TaskReminderUtilities {
             extrasBundle.putInt("id", task.getId());
 
             //Getting notification interval in seconds according to task
+
             int reminderIntervalSeconds = getReminderIntervalSeconds(task);
 
             Job TaskReminderJob = dispatcher.newJobBuilder()
@@ -54,7 +54,7 @@ public class TaskReminderUtilities {
                     .setRecurring(true)
                     .setTrigger(Trigger.executionWindow(
                             reminderIntervalSeconds,
-                            reminderIntervalSeconds * 2))
+                            reminderIntervalSeconds + 60 ))
                     .setReplaceCurrent(true)
                     .setExtras(extrasBundle)
                     .build();
