@@ -50,9 +50,31 @@
                     android:gravity="center"
 
                     />
+                <TextView
+                    android:id="@+id/repo"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/repoLink"
+                    android:textColor="#FFFF"
+                    android:textSize="15sp"
+                    android:gravity="center"
+
+                    />
+
+                <!--This View serves as a visual divider between list items-->
+                <View
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/colorPrimaryDark"
+
+                    />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="15dp"
@@ -61,16 +83,17 @@
 
 
                     <ImageView
+                        android:layout_marginLeft="20dp"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/git"/>
 
                     <TextView
-
+                        android:id="@+id/github"
                         android:layout_marginLeft="6dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text=" iamfauz"
+                        android:text="@string/github"
                         android:textColor="#FFFF"
                         android:textSize="15sp"
 
@@ -79,7 +102,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="15dp"
@@ -88,16 +111,17 @@
 
 
                     <ImageView
+                        android:layout_marginLeft="20dp"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/instagram"/>
 
                     <TextView
-
+                        android:id="@+id/insta"
                         android:layout_marginLeft="6dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text=" iamfauz_"
+                        android:text="@string/insta"
                         android:textColor="#FFFF"
                         android:textSize="15sp"
 
@@ -105,8 +129,10 @@
                         />
                 </LinearLayout>
 
+
+
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="15dp"
@@ -115,6 +141,62 @@
 
 
                     <ImageView
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/twitter"/>
+
+                    <TextView
+                        android:id="@+id/twitter"
+                        android:layout_marginLeft="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/twitter"
+                        android:textColor="#FFFF"
+                        android:textSize="15sp"
+
+
+                        />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="15dp"
+                    android:layout_gravity="center_horizontal"
+                    >
+
+
+                    <ImageView
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/linkedin"/>
+                    <TextView
+                        android:id="@+id/linkedin"
+                        android:layout_marginLeft="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/linkedin"
+                        android:textColor="#FFFF"
+                        android:textSize="15sp"
+
+
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="15dp"
+                    android:layout_gravity="center_horizontal"
+                    >
+
+
+                    <ImageView
+                        android:layout_marginLeft="20dp"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/snapchat"/>
@@ -125,61 +207,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text=" iamfauz"
-                        android:textColor="#FFFF"
-                        android:textSize="15sp"
-
-
-                        />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="15dp"
-                    android:layout_gravity="center_horizontal"
-                    >
-
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/twitter"/>
-
-                    <TextView
-
-                        android:layout_marginLeft="6dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text=" iamfauz_"
-                        android:textColor="#FFFF"
-                        android:textSize="15sp"
-
-
-                        />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="15dp"
-                    android:layout_gravity="center_horizontal"
-                    >
-
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/linkedin"/>
-                    <TextView
-
-                        android:layout_marginLeft="6dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text=" iamfauz"
-                        android:textColor="#FFFF"
+                        android:textColor="@color/colorAccent"
                         android:textSize="15sp"
 
 

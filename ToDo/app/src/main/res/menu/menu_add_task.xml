@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/search"
+    <item android:id="@+id/addToCalender"
         android:title="Add To Calender"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/ic_event_black_24dp"
         app:showAsAction="always"
        />
 

@@ -8,6 +8,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.provider.CalendarContract;
 import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
@@ -16,6 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -29,6 +33,7 @@ import android.widget.Toast;
 
 import com.example.intern.todo.R;
 import com.example.intern.todo.helper.AppExecutors;
+import com.example.intern.todo.helper.CalenderUtils;
 import com.example.intern.todo.helper.DateHelper;
 import com.example.intern.todo.model.AppDatabase;
 import com.example.intern.todo.model.Task;
@@ -36,6 +41,7 @@ import com.example.intern.todo.reminder.TaskReminderUtilities;
 import com.example.intern.todo.viewmodel.AddTaskViewModel;
 import com.example.intern.todo.viewmodel.AddTaskViewModelFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -406,6 +412,51 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        /* Use AppCompatActivity's method getMenuInflater to get a handle on the menu inflater */
+        MenuInflater inflater = getMenuInflater();
+        /* Use the inflater's inflate method to inflate our menu layout to this menu */
+        inflater.inflate(R.menu.menu_add_task, menu);
+        /* Return true so that the menu is displayed in the Toolbar */
+        return true;
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.addToCalender) {
+
+            String description = taskEditText.getText().toString();
+            String category = categorySpinner.getSelectedItem().toString();
+            String dueDate = dueDateEditText.getText().toString();
+            String dueTime = dueTimeEditText.getText().toString();
+            Date date = DateHelper.getDate(dueDate + ", " + dueTime);
+
+            if (TextUtils.isEmpty(taskEditText.getText().toString())) {
+                taskEditText.setError("Can't leave field empty.");
+                return super.onOptionsItemSelected(item);
+            }
+
+            if (TextUtils.isEmpty(dueDateEditText.getText().toString())) {
+                dueDateEditText.setError("Can't leave field empty.");
+                return super.onOptionsItemSelected(item);
+            }
+            if (TextUtils.isEmpty(dueTimeEditText.getText().toString())) {
+                dueTimeEditText.setError("Can't leave field empty.");
+                return super.onOptionsItemSelected(item);
+            }
+
+            CalenderUtils.addSessionToCalender(this, description, category, date);
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     /**
      * Speech Recognition functionality
@@ -437,6 +488,12 @@ public class AddTaskActivity extends AppCompatActivity {
                 break;
         }
     }
+
+
+
+
+
+
 
 
 }

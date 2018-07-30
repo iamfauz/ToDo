@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">ToDo</string>
     <string name="hint">Enter Task</string>
+    <string name="repoLink">https://github.com/iamfauz/ToDo</string>
+    <string name="insta">http://instagram.com/_u/iamfauz_</string>
+    <string name="github">https://github.com/iamfauz</string>
+    <string name="linkedin">https://linkedin.com/in/iamfauz</string>
+    <string name="twitter">https://twitter.com/iamfauz_</string>
 </resources>
