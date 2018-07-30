@@ -1,6 +1,7 @@
-package com.example.intern.todo;
+package com.example.intern.todo.view;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.arch.lifecycle.Observer;
@@ -25,6 +26,15 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.example.intern.todo.R;
+import com.example.intern.todo.helper.AppExecutors;
+import com.example.intern.todo.helper.DateHelper;
+import com.example.intern.todo.model.AppDatabase;
+import com.example.intern.todo.model.Task;
+import com.example.intern.todo.reminder.TaskReminderUtilities;
+import com.example.intern.todo.viewmodel.AddTaskViewModel;
+import com.example.intern.todo.viewmodel.AddTaskViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -212,6 +222,7 @@ public class AddTaskActivity extends AppCompatActivity {
                     mDb.taskDao().insertTask(task);
                     List<Task> tasks = mDb.taskDao().loadLatestAddedTask();
                     TaskReminderUtilities.scheduleTaskReminder(getApplicationContext(), tasks.get(0));
+                    //AlarmManagerUtilities.startAlarm(getApplicationContext(), tasks.get(0));
 
                 } else {
                     //update task
@@ -223,8 +234,12 @@ public class AddTaskActivity extends AppCompatActivity {
                     if (!task.getNotificationInterval().equals(TaskReminderUtilities.notificationSpinnerList.get(0)))
                         TaskReminderUtilities.deleteReminder(task, getApplicationContext());
 
+                    //Cancelling old alarm
+                    //AlarmManagerUtilities.cancelAlarm(getApplicationContext(), task);
+
                     //Starting new notification service
                     TaskReminderUtilities.scheduleTaskReminder(getApplicationContext(), task);
+                   // AlarmManagerUtilities.startAlarm(getApplicationContext(), task);
                 }
                 finish();
             }

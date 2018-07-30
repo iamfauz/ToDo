@@ -1,9 +1,12 @@
-package com.example.intern.todo;
+package com.example.intern.todo.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.util.Log;
+
+import com.example.intern.todo.model.AppDatabase;
+import com.example.intern.todo.model.Task;
 
 import java.util.List;
 

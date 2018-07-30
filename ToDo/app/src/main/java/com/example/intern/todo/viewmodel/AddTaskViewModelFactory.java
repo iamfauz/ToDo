@@ -1,7 +1,9 @@
-package com.example.intern.todo;
+package com.example.intern.todo.viewmodel;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
+
+import com.example.intern.todo.model.AppDatabase;
 
 
 public class AddTaskViewModelFactory extends ViewModelProvider.NewInstanceFactory {

@@ -1,4 +1,4 @@
-package com.example.intern.todo;
+package com.example.intern.todo.reminder;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;

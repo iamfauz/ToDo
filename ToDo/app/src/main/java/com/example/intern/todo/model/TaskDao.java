@@ -1,4 +1,4 @@
-package com.example.intern.todo;
+package com.example.intern.todo.model;
 
 
 import android.arch.lifecycle.LiveData;

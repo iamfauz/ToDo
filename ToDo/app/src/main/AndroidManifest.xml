@@ -12,30 +12,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.SEARCH" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-
-            <meta-data android:name="android.app.searchable"
+            <meta-data
+                android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
-
         </activity>
-        <activity android:name=".AddTaskActivity" />
+        <activity android:name=".view.AddTaskActivity" />
 
         <service
-            android:name=".TaskReminderFirebaseJobService"
+            android:name=".reminder.TaskReminderFirebaseJobService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
 
-        <activity android:name=".AboutActivity"></activity>
+        <activity android:name=".view.AboutActivity" />
+        <activity android:name=".reminder.AlarmReceiverActivity"></activity>
     </application>
 
 </manifest>

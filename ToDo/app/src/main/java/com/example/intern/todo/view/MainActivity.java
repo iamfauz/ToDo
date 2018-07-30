@@ -1,4 +1,4 @@
-package com.example.intern.todo;
+package com.example.intern.todo.view;
 
 import android.app.Activity;
 import android.app.SearchManager;
@@ -26,6 +26,12 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.example.intern.todo.R;
+import com.example.intern.todo.helper.AppExecutors;
+import com.example.intern.todo.model.AppDatabase;
+import com.example.intern.todo.model.Task;
+import com.example.intern.todo.reminder.TaskReminderUtilities;
+import com.example.intern.todo.viewmodel.MainViewModel;
 import com.firebase.jobdispatcher.Driver;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
@@ -129,8 +135,11 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
                         List<Task> tasks = mTaskAdapter.getTasks();
                         Task task = tasks.get(position);
 
+                        //Cancelling Notification service
                         if (!task.getNotificationInterval().equals(TaskReminderUtilities.notificationSpinnerList.get(0)))
-                            TaskReminderUtilities.deleteReminder(task, getApplicationContext()); //Cancelling Notification service
+                            TaskReminderUtilities.deleteReminder(task, getApplicationContext());
+                        //Cancelling alarm
+                       // AlarmManagerUtilities.cancelAlarm(getApplicationContext(), task);
 
                         mDb.taskDao().deleteTask(task);
                     }

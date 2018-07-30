@@ -1,4 +1,4 @@
-package com.example.intern.todo;
+package com.example.intern.todo.view;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.example.intern.todo.R;
+import com.example.intern.todo.helper.DateHelper;
+import com.example.intern.todo.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;

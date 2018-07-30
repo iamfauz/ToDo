@@ -1,4 +1,4 @@
-package com.example.intern.todo;
+package com.example.intern.todo.reminder;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+
+import com.example.intern.todo.R;
+import com.example.intern.todo.view.MainActivity;
 
 public class NotificationsUtils {
 
