@@ -19,4 +19,8 @@ A To-Do list android application having MVVM architecture using Android architec
 
 # App Architecture
 
+![mvvm3](https://user-images.githubusercontent.com/20114242/43380529-7e683d08-93e2-11e8-8c14-65085f2e33ef.png)
+
+
+   
 
