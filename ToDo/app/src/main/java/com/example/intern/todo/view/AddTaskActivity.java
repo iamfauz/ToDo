@@ -146,7 +146,6 @@ public class AddTaskActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(@Nullable Task taskEntry) {
 
-                        Log.d("TEST", "Hyyyyyy");
                         viewModel.getTask().removeObserver(this);
                         populateUI(taskEntry);
                     }

@@ -177,8 +177,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ListI
             @Override
             public void onChanged(@Nullable List<Task> taskEntries) {
 
-                Log.d("TEST", "HERERRERE");
-
                 if (taskEntries.size() == 0) {
                     Log.d("Search", "main");
                     mTaskAdapter.setTasksData(taskEntries);

@@ -20,7 +20,6 @@ public class AlarmManagerSingleton {
                 sInstance =  (AlarmManager) context.getSystemService(Activity.ALARM_SERVICE);
             }
         }
-
         return sInstance;
     }
 }

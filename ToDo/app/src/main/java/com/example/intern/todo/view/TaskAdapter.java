@@ -16,6 +16,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.example.intern.todo.R;
 import com.example.intern.todo.helper.DateHelper;
 import com.example.intern.todo.model.Task;
+import com.example.intern.todo.reminder.TaskReminderUtilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
         TextView overdueTextView;
         @BindView(R.id.category_image_view)
         ImageView categoryImageView;
+        @BindView(R.id.bell)
+        ImageView bellIcon;
 
         public Task task;
 
@@ -119,9 +122,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskAdapterVie
         if (task.isOverdueTask())
             holder.overdueTextView.setVisibility(View.VISIBLE);
         else
-            holder.overdueTextView.setVisibility(View.INVISIBLE);
+            holder.overdueTextView.setVisibility(View.GONE);
 
-        Log.d("ONBIND", "ONBINDINGNGNGN");
+        if(task.getNotificationInterval().equals(TaskReminderUtilities.notificationSpinnerList.get(0)))
+            holder.bellIcon.setImageResource(R.drawable.ic_notifications_off_black_24dp);
+        else
+            holder.bellIcon.setImageResource(R.drawable.ic_notifications_black_24dp);
+
+
 
     }
         @Override

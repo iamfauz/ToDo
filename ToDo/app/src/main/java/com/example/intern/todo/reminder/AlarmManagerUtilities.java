@@ -32,8 +32,6 @@ public class AlarmManagerUtilities {
         am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
                 contentIntent(context, task));
 
-        Log.d("TEST", "ALALALAL");
-
     }
 
     private static PendingIntent contentIntent(Context context, Task task) {
@@ -61,7 +59,6 @@ public class AlarmManagerUtilities {
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         am.cancel(pi);
-        Log.d("TEST", "ALALALAL");
     }
 
 
